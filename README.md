@@ -41,6 +41,7 @@ The user can specify a target frequency resolution that determines the observati
 - Comparison of raw FFT-bin and interpolated estimates
 - Diagnostic plots and command-window summaries
 - Controlled QPSK validation example generated with GNU Radio
+- Downloadable IQ validation recording
 
 ## Processing Pipeline
 
@@ -350,6 +351,40 @@ qpsk_doppler_test_int16.dat
 
 File paths can be changed from the File Source and File Sink blocks in GNU Radio Companion.
 
+## Validation Dataset Download
+
+The QPSK IQ recording used for the validation example is available as an asset in release `v0.1.0`.
+
+[Download the QPSK validation IQ recording](https://github.com/mahdighaderi1997/psk-cfo-doppler-monitor/releases/download/v0.1.0/qpsk_doppler_test_int16_2Msps_10s.dat)
+
+Recording specifications:
+
+| Parameter | Value |
+|---|---|
+| Filename | `qpsk_doppler_test_int16_2Msps_10s.dat` |
+| Modulation | QPSK |
+| Sampling rate | 2 MHz |
+| Sample format | Interleaved signed 16-bit I/Q |
+| Sample order | I0, Q0, I1, Q1, ... |
+| Recording duration | 10 seconds |
+| Approximate download size | 76.3 MB |
+| Release | `v0.1.0` |
+
+Use the following settings when analyzing this recording:
+
+```text
+Sample format: int16
+Sampling frequency: 2e6 Hz
+Modulation: QPSK
+Requested frequency resolution: 10 Hz
+```
+
+> Access to the private repository is required to download the recording.
+
+The complete release page is available here:
+
+[View release v0.1.0](https://github.com/mahdighaderi1997/psk-cfo-doppler-monitor/releases/tag/v0.1.0)
+
 ## Repository Structure
 
 | Path | Contents |
@@ -380,7 +415,7 @@ File paths can be changed from the File Source and File Sink blocks in GNU Radio
 
 ## Data Handling
 
-Raw IQ recordings are not currently included in the main Git repository.
+Raw IQ recordings are not tracked in the main Git history. The QPSK validation recording is distributed separately through GitHub Releases.
 
 The `.gitignore` file contains exclusions for common recording formats and local data directories, including:
 
@@ -396,7 +431,7 @@ data/recordings/
 
 These rules help prevent untracked local recordings from being added through Git. They do not remove files that are already tracked and should not be treated as a safeguard for uploads through the GitHub web interface.
 
-Large IQ examples can be distributed separately through GitHub Releases without adding them to the main Git history.
+Large IQ recordings can be distributed through GitHub Releases without adding them to the main Git history.
 
 ## Documentation
 
@@ -408,11 +443,17 @@ Additional documentation for the validation flowgraph is available here:
 
 [Read the GNU Radio example documentation](examples/gnuradio/README.md)
 
+The first documented project release is available here:
+
+[View release v0.1.0](https://github.com/mahdighaderi1997/psk-cfo-doppler-monitor/releases/tag/v0.1.0)
+
 ## Project Status
 
 The current implementation provides an interactive MATLAB workflow for PSK carrier-frequency estimation and temporal frequency monitoring from recorded IQ data.
 
 A controlled QPSK test generated in GNU Radio has been used to verify that the estimator follows the applied time-varying frequency profile.
+
+Release `v0.1.0` includes the downloadable QPSK IQ validation recording used to produce the documented results.
 
 Potential future improvements include:
 
