@@ -188,7 +188,7 @@ A minimum supported MATLAB release has not yet been formally established.
 
 ## Getting Started
 
-### 1. Obtain the repository
+### 1. Obtain the Repository
 
 Clone the repository using its GitHub clone URL, or download and extract the ZIP archive.
 
@@ -198,7 +198,7 @@ Access to this private repository is required.
 
 Set the MATLAB Current Folder to the repository root.
 
-### 3. Add the source directory and run
+### 3. Add the Source Directory and Run
 
 ```matlab
 addpath('src');
@@ -211,7 +211,7 @@ Alternatively, open the following file in the MATLAB Editor and select **Run**:
 src/doppler_estimator_parametric_resolution.m
 ```
 
-### 4. Complete the interactive workflow
+### 4. Complete the Interactive Workflow
 
 1. Select an IQ recording.
 2. Choose the sample format.
@@ -251,6 +251,61 @@ A numerical summary is also printed in the MATLAB command window.
 
 The technical report provides examples and explanations of the output figures.
 
+## Synthetic Signal Example
+
+The estimator was tested using a QPSK IQ recording with a controlled time-varying frequency offset generated in GNU Radio.
+
+The test recording has the following characteristics:
+
+| Parameter | Value |
+|---|---|
+| Modulation | QPSK |
+| Sampling rate | 2 MHz |
+| Sample format | Interleaved signed 16-bit I/Q |
+| Recording duration | 10 seconds |
+| Requested estimator resolution | 10 Hz |
+| Confidence threshold | 7 dB |
+
+The applied time-varying frequency offset is approximately:
+
+```text
+Δf(t) = 70 × cos(2π × 0.1t) × sin(2π × 0.3t) Hz
+```
+
+Equivalently:
+
+```text
+Δf(t) = 35 × [sin(2π × 0.4t) + sin(2π × 0.2t)] Hz
+```
+
+The waveform repeats every 5 seconds and reaches approximately ±61.6 Hz.
+
+### Signal-Band Selection
+
+The signal bandwidth is selected from the estimated power spectral density before carrier processing.
+
+![Signal-band selection](assets/figures/signal_band_selection.png)
+
+### Carrier-Extraction Peak
+
+The M-th power spectrum produces a prominent carrier-related peak. Parabolic interpolation refines the estimate beyond the raw FFT-bin grid.
+
+![Carrier-extraction peak](assets/figures/carrier_extraction_peak.png)
+
+### Relative Frequency Tracking
+
+The estimated relative-frequency curve follows the periodic frequency variation introduced by the GNU Radio flowgraph. The interpolated estimate reduces the quantized appearance of the raw FFT-bin estimate.
+
+![Relative frequency tracking](assets/figures/relative_doppler.png)
+
+### Estimation Confidence
+
+The peak-to-background ratio remains around 39–40 dB throughout the recording, substantially above the 7 dB validity threshold.
+
+![Carrier-estimation confidence](assets/figures/estimation_confidence.png)
+
+> The plotted relative-frequency variation represents the combined observable frequency offset. In a real measurement, this variation may include Doppler, oscillator offset, and oscillator drift.
+
 ## Repository Structure
 
 | Path | Contents |
@@ -260,6 +315,8 @@ The technical report provides examples and explanations of the output figures.
 | `src/doppler_estimator_parametric_resolution.m` | Main MATLAB implementation |
 | `docs/README.md` | Documentation overview |
 | `docs/PSK_CFO_Doppler_Monitor_Report_FA.pdf` | Persian technical report |
+| `assets/figures/` | Output figures from the synthetic-signal test |
+| `assets/figures/README.md` | Description of the result figures |
 
 ## Technical Notes and Limitations
 
@@ -272,11 +329,11 @@ The technical report provides examples and explanations of the output figures.
 - **Interference:** Strong neighboring signals or spurious spectral components can affect peak selection.
 - **Waveform dependence:** Modulation format, pulse shaping, and OQPSK staggering can affect M-th power carrier extraction.
 - **Confidence interpretation:** A prominent peak does not by itself prove that the correct carrier or ambiguity branch was selected.
-- **Validation:** Accuracy and robustness should be assessed using controlled signals with known frequency offsets before making quantitative performance claims.
+- **Validation scope:** The included controlled test demonstrates tracking of one QPSK frequency-offset profile. Broader quantitative validation requires additional SNR levels, modulation formats, offset profiles, and repeated trials.
 
 ## Data Handling
 
-Raw IQ recordings are not included in this repository.
+Raw IQ recordings are not currently included in the main repository.
 
 The `.gitignore` file contains exclusions for common recording formats and local data directories, including:
 
@@ -302,9 +359,11 @@ A Persian technical report describes the processing stages, mathematical formula
 
 The current implementation provides an interactive MATLAB workflow for PSK carrier-frequency estimation and temporal frequency monitoring from recorded IQ data.
 
+A controlled QPSK test generated in GNU Radio has been used to verify that the estimator follows the applied time-varying frequency profile.
+
 Potential future improvements include:
 
-- Synthetic IQ examples with known frequency offsets
+- Additional synthetic test scenarios with different SNR and frequency-offset profiles
 - Automated performance evaluation
 - Bias and RMSE analysis across SNR conditions
 - Evaluation under controlled frequency drift
