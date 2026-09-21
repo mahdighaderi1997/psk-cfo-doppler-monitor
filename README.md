@@ -40,6 +40,7 @@ The user can specify a target frequency resolution that determines the observati
 - Peak-to-background confidence measurement
 - Comparison of raw FFT-bin and interpolated estimates
 - Diagnostic plots and command-window summaries
+- Controlled QPSK validation example generated with GNU Radio
 
 ## Processing Pipeline
 
@@ -171,6 +172,8 @@ Recordings must match the sample ordering and binary format expected by the impl
 
 ## Requirements
 
+### MATLAB Estimator
+
 - MATLAB
 - Signal Processing Toolbox
 - A MATLAB environment supporting interactive dialogs and figures
@@ -185,6 +188,16 @@ Functions used by the implementation include:
 - `fft`
 
 A minimum supported MATLAB release has not yet been formally established.
+
+### GNU Radio Validation Example
+
+GNU Radio is required only when opening or reproducing the included validation flowgraph.
+
+The flowgraph was created using:
+
+```text
+GNU Radio 3.10.12
+```
 
 ## Getting Started
 
@@ -255,6 +268,10 @@ The technical report provides examples and explanations of the output figures.
 
 The estimator was tested using a QPSK IQ recording with a controlled time-varying frequency offset generated in GNU Radio.
 
+The GNU Radio flowgraph and its configuration details are available in the [GNU Radio example directory](examples/gnuradio/).
+
+The flowgraph reads an external interleaved signed 16-bit QPSK recording, applies a controlled frequency variation using a voltage-controlled oscillator, and writes the resulting IQ samples to an output file.
+
 The test recording has the following characteristics:
 
 | Parameter | Value |
@@ -265,6 +282,7 @@ The test recording has the following characteristics:
 | Recording duration | 10 seconds |
 | Requested estimator resolution | 10 Hz |
 | Confidence threshold | 7 dB |
+| GNU Radio version | 3.10.12 |
 
 The applied time-varying frequency offset is approximately:
 
@@ -306,6 +324,32 @@ The peak-to-background ratio remains around 39–40 dB throughout the recording,
 
 > The plotted relative-frequency variation represents the combined observable frequency offset. In a real measurement, this variation may include Doppler, oscillator offset, and oscillator drift.
 
+## GNU Radio Example
+
+The validation flowgraph is located at:
+
+```text
+examples/gnuradio/qpsk_doppler_example.grc
+```
+
+Detailed configuration and usage information is available in:
+
+[GNU Radio Example Documentation](examples/gnuradio/README.md)
+
+The flowgraph expects a local QPSK source recording named:
+
+```text
+qpsk_input_int16.dat
+```
+
+The default generated output filename is:
+
+```text
+qpsk_doppler_test_int16.dat
+```
+
+File paths can be changed from the File Source and File Sink blocks in GNU Radio Companion.
+
 ## Repository Structure
 
 | Path | Contents |
@@ -317,6 +361,8 @@ The peak-to-background ratio remains around 39–40 dB throughout the recording,
 | `docs/PSK_CFO_Doppler_Monitor_Report_FA.pdf` | Persian technical report |
 | `assets/figures/` | Output figures from the synthetic-signal test |
 | `assets/figures/README.md` | Description of the result figures |
+| `examples/gnuradio/README.md` | GNU Radio test configuration and usage notes |
+| `examples/gnuradio/qpsk_doppler_example.grc` | Flowgraph used to generate the controlled QPSK frequency variation |
 
 ## Technical Notes and Limitations
 
@@ -330,10 +376,11 @@ The peak-to-background ratio remains around 39–40 dB throughout the recording,
 - **Waveform dependence:** Modulation format, pulse shaping, and OQPSK staggering can affect M-th power carrier extraction.
 - **Confidence interpretation:** A prominent peak does not by itself prove that the correct carrier or ambiguity branch was selected.
 - **Validation scope:** The included controlled test demonstrates tracking of one QPSK frequency-offset profile. Broader quantitative validation requires additional SNR levels, modulation formats, offset profiles, and repeated trials.
+- **GNU Radio input dependency:** The included flowgraph requires a compatible local QPSK IQ recording as its input.
 
 ## Data Handling
 
-Raw IQ recordings are not currently included in the main repository.
+Raw IQ recordings are not currently included in the main Git repository.
 
 The `.gitignore` file contains exclusions for common recording formats and local data directories, including:
 
@@ -349,11 +396,17 @@ data/recordings/
 
 These rules help prevent untracked local recordings from being added through Git. They do not remove files that are already tracked and should not be treated as a safeguard for uploads through the GitHub web interface.
 
+Large IQ examples can be distributed separately through GitHub Releases without adding them to the main Git history.
+
 ## Documentation
 
 A Persian technical report describes the processing stages, mathematical formulation, and interpretation of the results.
 
 [Read the technical report](docs/PSK_CFO_Doppler_Monitor_Report_FA.pdf)
+
+Additional documentation for the validation flowgraph is available here:
+
+[Read the GNU Radio example documentation](examples/gnuradio/README.md)
 
 ## Project Status
 
