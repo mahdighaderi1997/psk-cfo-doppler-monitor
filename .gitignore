@@ -1,0 +1,32 @@
+# MATLAB autosave and temporary files
+*.asv
+*.m~
+*.autosave
+
+# MATLAB generated files
+slprj/
+codegen/
+*.mex*
+*.mlappinstall
+
+# Raw IQ and signal recordings
+*.dat
+*.iq
+*.bin
+*.raw
+
+# Large/local data folders
+data/raw/
+data/recordings/
+
+# Results generated locally
+results/temp/
+results/cache/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
